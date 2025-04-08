@@ -105,6 +105,7 @@ print_step "必要なファイルを作成しています..."
 {
   echo "#!/bin/bash"
   echo ""
+  echo "shopt -s expand_aliases"
   echo "alias activate=\"source ./venv/bin/activate\""
   echo "alias freeze=\"pip freeze > ./requirements.txt\""
   echo "alias importreq=\"pip install -r ./requirements.txt\""
