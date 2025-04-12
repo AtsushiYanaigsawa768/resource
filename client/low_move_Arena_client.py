@@ -7,6 +7,6 @@ class SampleClient(Client):
         # カスタムロジックを実装
         print(f"[SampleClient] AI deciding action based on sum: {sum}, log: {log}, actions: {actions},others_info: {others_info}")
         # 例: ランダムにアクションを選択
-        action = random.choice(actions)
+        action = max(min(actions),sum+1)
         print(f"[SampleClient] AI selected action: {action}")
         return action

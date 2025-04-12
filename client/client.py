@@ -4,7 +4,6 @@ import socketio
 import time
 import coyote
 import asyncio
-
 class Client:
     def __init__(self,port=5000, room_id="test-room", player_name="player1", is_ai=False):
         self.sio = socketio.Client(logger=True, engineio_logger=False)
