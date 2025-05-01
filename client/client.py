@@ -90,7 +90,6 @@ class Client:
         print(f"Now OthersSum: {now_sum}") #デバック用
         print(f"now log: {now_log}")
 
-
     def handle_turn(self, turn_data):
         """
         プレイヤーがターンで行動 

@@ -15,13 +15,38 @@ class GameTrackingClient(Client):
             (0, 3), (-5, 2), (-10, 1)
         ]:
             self.remained_cards.extend([value] * count)
+        self.int_remained_cards = 36 
+        self.history_card_info = [] #1ターン前のカード情報を保持するリスト
+    
+    def reset_card_info(self):
+        # カードのデッキを初期化：数値×枚数の形式でリストに追加
+        self.remained_cards = []
+        for value, count in [
+            (1, 4), (2, 4), (3, 4), (4, 4), (5, 4),
+            (10, 3), (15, 2), (20, 1),
+            (0, 3), (-5, 2), (-10, 1)
+        ]:
+            self.remained_cards.extend([value] * count)
+        self.int_remained_cards = 36
+
 
     def AI_player_action(self,others_info, current_sum, log, actions):
-        # カスタムロジックを実装
         print(f"[SampleClient] AI deciding action based on sum: {current_sum}, log: {log}, actions: {actions},others_info: {others_info}")
-        # 例: ランダムにアクションを選択
+
         # Extract card_info from others_info
         drawn_cards = [player['card_info'] for player in others_info]
+        if self.history_card_info != drawn_cards:
+            # カードの情報が異なる場合、新たなターンが始まったとみなす。
+            self.history_card_info = drawn_cards
+            self.int_remained_cards -= len(drawn_cards) + 1  # 残りのカード枚数を減少 (1は自分のカード)
+            if self.int_remained_cards < 0:
+                self.reset_card_info()  # 残りのカードが0未満になった場合、カード情報をリセット
+                self.int_remained_cards -= len(drawn_cards) + 1
+
+        print(log)
+        time.sleep(3)
+        
+        # 以下は、期待値を計算するためのロジック
         self.game_drawn_cards.append(drawn_cards)  # Record cards drawn in the current turn
         # Remove drawn cards from remained_cards
         for card in drawn_cards:
@@ -34,6 +59,8 @@ class GameTrackingClient(Client):
         else:
             expected_value = 0
         action = current_sum+int(expected_value)
+
+        # coyote絶対に宣言したくない場合、以下のコードを有効にする
         # If log exists, find the maximum action from it
         # if log:
         #     max_action_from_log = max(entry['action'] for entry in log)
