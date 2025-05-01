@@ -180,3 +180,5 @@ setup_session.sh
 
 # added
 log/*
+# for api keys
+api.json
